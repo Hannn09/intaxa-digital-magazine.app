@@ -2,6 +2,7 @@ import 'package:covid/login.dart';
 import 'package:covid/magazines.dart';
 import 'package:flutter/material.dart';
 import 'package:covid/detailmagz.dart';
+import 'package:covid/web_view.dart';
 
 class TopicMagz extends StatefulWidget {
   @override
@@ -28,6 +29,7 @@ class _TopicMagzState extends State<TopicMagz> {
       body: Stack(
         children: <Widget>[menu(context), dashboard(context)],
       ),
+      drawer: Drawer(),
     );
   }
 
@@ -69,33 +71,9 @@ class _TopicMagzState extends State<TopicMagz> {
               height: 10,
             ),
             GestureDetector(
-              onTap: () {},
-              child: Container(
-                width: 126,
-                height: 40,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xFF3E90FC)),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: Text(
-                    'Most Popular',
-                    style: TextStyle(
-                        fontFamily: 'Viga',
-                        fontSize: 18,
-                        color: Color(0xFFFFFFFF)),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => DetailMagz()));
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Web()));
               },
               child: Container(
                 width: 126,
@@ -107,7 +85,7 @@ class _TopicMagzState extends State<TopicMagz> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   child: Text(
-                    'Developer',
+                    'Web View',
                     style: TextStyle(
                         fontFamily: 'Viga',
                         fontSize: 18,
@@ -204,7 +182,12 @@ class _TopicMagzState extends State<TopicMagz> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 15),
                               child: IconButton(
-                                  icon: Icon(Icons.search), onPressed: null),
+                                  icon: Icon(Icons.search),
+                                  onPressed: () {
+                                    showSearch(
+                                        context: context,
+                                        delegate: DataSearch());
+                                  }),
                             ),
                           ],
                         ),
@@ -374,8 +357,8 @@ class _TopicMagzState extends State<TopicMagz> {
                                                   bottomLeft:
                                                       Radius.circular(10)),
                                               color: isSelectedCovid
-                                                  ? Color(0xFFFFFFFF)
-                                                  : Color(0xFF0D6AE3)),
+                                                  ? Color(0xFF0D6AE3)
+                                                  : Color(0xFFFFFFFF)),
                                           child: Row(
                                             children: <Widget>[
                                               GestureDetector(
@@ -396,9 +379,9 @@ class _TopicMagzState extends State<TopicMagz> {
                                                           fontSize: 11,
                                                           color: isSelectedCovid
                                                               ? Color(
-                                                                  0xFF000000)
+                                                                  0xFFFFFFFF)
                                                               : Color(
-                                                                  0xFFFFFFFF)),
+                                                                  0xFF000000)),
                                                     ),
                                                   ),
                                                 ),
@@ -409,8 +392,8 @@ class _TopicMagzState extends State<TopicMagz> {
                                         Container(
                                           decoration: BoxDecoration(
                                               color: isSelectedTech
-                                                  ? Color(0xFFFFFFFF)
-                                                  : Color(0xFF0D6AE3)),
+                                                  ? Color(0xFF0D6AE3)
+                                                  : Color(0xFFFFFFFF)),
                                           child: Row(children: <Widget>[
                                             GestureDetector(
                                                 onTap: () {
@@ -430,9 +413,9 @@ class _TopicMagzState extends State<TopicMagz> {
                                                           fontSize: 11,
                                                           color: isSelectedTech
                                                               ? Color(
-                                                                  0xFF000000)
+                                                                  0xFFFFFFFF)
                                                               : Color(
-                                                                  0xFFFFFFFF)),
+                                                                  0xFF000000)),
                                                     ),
                                                   ),
                                                 )),
@@ -441,8 +424,8 @@ class _TopicMagzState extends State<TopicMagz> {
                                         Container(
                                           decoration: BoxDecoration(
                                             color: isSelectedInfo
-                                                ? Color(0xFFFFFFFF)
-                                                : Color(0xFF0D6AE3),
+                                                ? Color(0xFF0D6AE3)
+                                                : Color(0xFFFFFFFF),
                                             borderRadius: BorderRadius.only(
                                                 topRight: Radius.circular(10),
                                                 bottomRight:
@@ -468,9 +451,9 @@ class _TopicMagzState extends State<TopicMagz> {
                                                           fontSize: 11,
                                                           color: isSelectedInfo
                                                               ? Color(
-                                                                  0xFF000000)
+                                                                  0xFFFFFFFF)
                                                               : Color(
-                                                                  0xFFFFFFFF)),
+                                                                  0xFF000000)),
                                                     ),
                                                   ),
                                                 ),
@@ -901,5 +884,65 @@ class _TopicMagzState extends State<TopicMagz> {
             ],
           ),
         ));
+  }
+}
+
+class DataSearch extends SearchDelegate<String> {
+  final magazines = [
+    "Maspion IT",
+    "SMKN 1 Purwosari",
+    "Maspion Bank",
+  ];
+
+  final recentMagazine = ["SMKN 1 Purwosari", "Maspion IT"];
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+          icon: Icon(Icons.clear),
+          onPressed: () {
+            query = "";
+          })
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+        icon: AnimatedIcon(
+            icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
+        onPressed: () {
+          close(context, null);
+        });
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return null;
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestionList = query.isEmpty
+        ? recentMagazine
+        : magazines.where((p) => p.startsWith(query)).toList();
+
+    return ListView.builder(
+      itemBuilder: (context, index) => ListTile(
+        leading: Icon(Icons.history),
+        title: RichText(
+            text: TextSpan(
+                text: suggestionList[index].substring(0, query.length),
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                children: [
+              TextSpan(
+                  text: suggestionList[index].substring(query.length),
+                  style: TextStyle(color: Colors.grey))
+            ])),
+      ),
+      itemCount: suggestionList.length,
+    );
   }
 }

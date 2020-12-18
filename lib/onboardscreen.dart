@@ -1,4 +1,5 @@
-import 'package:covid/slider.dart';
+import 'package:covid/magazines.dart';
+import 'package:covid/slider/slider.dart';
 import 'package:flutter/material.dart';
 import 'package:covid/login.dart';
 
@@ -75,7 +76,7 @@ class _OnBoardingState extends State<OnBoarding> {
                         curve: Curves.easeInOutQuint);
                   } else {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Login()));
+                        MaterialPageRoute(builder: (context) => Magazines()));
                   }
                 },
                 child: AnimatedContainer(

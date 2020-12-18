@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:covid/register.dart';
 import 'package:covid/magazines.dart';
+import 'package:covid/register_web.dart';
+import 'package:covid/model/login_model.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,6 +19,15 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool _isHidden = true;
+  final scaffolKey = GlobalKey<ScaffoldState>();
+  GlobalKey<FormState> globalFormKey = new GlobalKey<FormState>();
+  LoginRequestModel requestModel;
+
+  @override
+  void iniState() {
+    super.initState();
+    requestModel = new LoginRequestModel();
+  }
 
   void _toggleVisibility() {
     setState(() {
@@ -41,112 +49,126 @@ class _LoginState extends State<Login> {
                   SizedBox(
                     height: 40,
                   ),
-                  Column(
-                    children: <Widget>[
-                      Center(
-                          child: Image.asset(
-                        'assets/login.png',
-                        width: 250.0,
-                        height: 250.0,
-                      )),
-                      Container(
-                        width: 273.0,
-                        child: TextField(
-                            cursorColor: Color(0xFFFFFFFF),
-                            decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xFFFFFFFF)),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xFFFFFFFF)),
-                                ),
-                                hintText: 'Type your email',
-                                hintStyle: TextStyle(
-                                    color: Color(0xFFFFFFFF),
-                                    fontFamily: 'Sora',
-                                    fontSize: 14.0))),
-                      ),
-                      Container(
-                        width: 273.0,
-                        child: TextField(
-                            obscureText: _isHidden,
-                            cursorColor: Color(0xFFFFFFFF),
-                            decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xFFFFFFFF)),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xFFFFFFFF)),
-                                ),
-                                suffixIcon: IconButton(
-                                  color: Color(0xFFFFFFFF),
-                                  icon: _isHidden
-                                      ? Icon(Icons.visibility_off)
-                                      : Icon(Icons.visibility),
-                                  onPressed: _toggleVisibility,
-                                ),
-                                hintText: 'Type your password',
-                                hintStyle: TextStyle(
-                                    color: Color(0xFFFFFFFF),
-                                    fontFamily: 'Sora',
-                                    fontSize: 14.0))),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 44.0,
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            InkWell(
-                              onTap: () {},
-                              child: Text(
-                                'Forgot Password ?',
-                                style: TextStyle(
-                                    fontFamily: 'Sora',
-                                    fontSize: 10.0,
-                                    color: Color(0xFFFFFFFF),
-                                    decoration: TextDecoration.underline),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 75),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Magazines()));
-                                },
-                                child: Container(
-                                  height: 47.0,
-                                  width: 113.0,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFFFFFFFF),
-                                    borderRadius: BorderRadius.circular(10.0),
+                  Form(
+                    key: globalFormKey,
+                    child: Column(
+                      children: <Widget>[
+                        Center(
+                            child: Image.asset(
+                          'assets/login.png',
+                          width: 250.0,
+                          height: 250.0,
+                        )),
+                        Container(
+                          width: 273.0,
+                          child: TextFormField(
+                              onSaved: (input) => requestModel.email = input,
+                              validator: (input) => !input.contains("@")
+                                  ? "Email should be valid"
+                                  : null,
+                              cursorColor: Color(0xFFFFFFFF),
+                              decoration: InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFFFFFFF)),
                                   ),
-                                  child: Center(
-                                    child: Text(
-                                      'Next',
-                                      style: TextStyle(
-                                        fontFamily: 'Sora',
-                                        fontSize: 14.0,
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFFFFFFF)),
+                                  ),
+                                  hintText: 'Type your email',
+                                  hintStyle: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontFamily: 'Sora',
+                                      fontSize: 14.0))),
+                        ),
+                        Container(
+                          width: 273.0,
+                          child: TextFormField(
+                              onSaved: (input) => requestModel.password = input,
+                              validator: (input) => input.length < 3
+                                  ? "Password should be more than 3 characters"
+                                  : null,
+                              obscureText: _isHidden,
+                              cursorColor: Color(0xFFFFFFFF),
+                              decoration: InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFFFFFFF)),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFFFFFFF)),
+                                  ),
+                                  suffixIcon: IconButton(
+                                    color: Color(0xFFFFFFFF),
+                                    icon: _isHidden
+                                        ? Icon(Icons.visibility_off)
+                                        : Icon(Icons.visibility),
+                                    onPressed: _toggleVisibility,
+                                  ),
+                                  hintText: 'Type your password',
+                                  hintStyle: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontFamily: 'Sora',
+                                      fontSize: 14.0))),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 44.0,
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              InkWell(
+                                onTap: () {},
+                                child: Text(
+                                  'Forgot Password ?',
+                                  style: TextStyle(
+                                      fontFamily: 'Sora',
+                                      fontSize: 10.0,
+                                      color: Color(0xFFFFFFFF),
+                                      decoration: TextDecoration.underline),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 75),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    // if (validateAndSave()) {
+                                    //   print(requestModel.toJson());
+                                    // }
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Magazines()));
+                                  },
+                                  child: Container(
+                                    height: 47.0,
+                                    width: 113.0,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFFFFFFFF),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'Next',
+                                        style: TextStyle(
+                                          fontFamily: 'Sora',
+                                          fontSize: 14.0,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   Container(
                     color: Color(0xFF0B4490),
@@ -184,7 +206,7 @@ class _LoginState extends State<Login> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Register()));
+                                      builder: (context) => RegistWeb()));
                             },
                             child: Container(
                               height: 47.0,
@@ -211,5 +233,14 @@ class _LoginState extends State<Login> {
                 ]),
           ),
         ));
+  }
+
+  bool validateAndSave() {
+    final form = globalFormKey.currentState;
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
   }
 }

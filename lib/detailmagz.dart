@@ -1,8 +1,12 @@
 import 'package:covid/login.dart';
 import 'package:covid/magazines.dart';
 import 'package:covid/topicmagz.dart';
+import 'package:covid/web_view.dart';
 import 'package:flutter/material.dart';
 import 'package:rating_dialog/rating_dialog.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+// import 'dart:async';
+// import 'package:webview_flutter/webview_flutter.dart';
 
 class DetailMagz extends StatefulWidget {
   @override
@@ -10,13 +14,16 @@ class DetailMagz extends StatefulWidget {
 }
 
 class _DetailMagzState extends State<DetailMagz> {
+  int pageChanged = 0;
   bool isSelectedShare = false;
   bool isSelectedSave = false;
   bool isSelectedStar = false;
   bool isCollapsed = true;
   double screenWidth, screenHeight;
   final Duration duration = const Duration(milliseconds: 500);
-
+  PageController pageController = PageController(initialPage: 0);
+  // final Completer<WebViewController> _webControl =
+  //     Completer<WebViewController>();
   void show() {
     showDialog(
         context: context,
@@ -37,6 +44,9 @@ class _DetailMagzState extends State<DetailMagz> {
           );
         });
   }
+  // void iniState() {
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +62,7 @@ class _DetailMagzState extends State<DetailMagz> {
           dashboard(context),
         ],
       ),
+      drawer: Drawer(),
     );
   }
 
@@ -94,8 +105,8 @@ class _DetailMagzState extends State<DetailMagz> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => TopicMagz()));
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Web()));
               },
               child: Container(
                 width: 126,
@@ -107,31 +118,7 @@ class _DetailMagzState extends State<DetailMagz> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   child: Text(
-                    'Most Popular',
-                    style: TextStyle(
-                        fontFamily: 'Viga',
-                        fontSize: 18,
-                        color: Color(0xFFFFFFFF)),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                width: 126,
-                height: 40,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xFF3E90FC)),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: Text(
-                    'Developer',
+                    'Web View',
                     style: TextStyle(
                         fontFamily: 'Viga',
                         fontSize: 18,
@@ -237,10 +224,15 @@ class _DetailMagzState extends State<DetailMagz> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 25),
-                                  child: Icon(
-                                    Icons.search,
+                                      horizontal: 10),
+                                  child: IconButton(
+                                    icon: Icon(Icons.search),
                                     color: Color(0xFFFFFFFF),
+                                    onPressed: () {
+                                      showSearch(
+                                          context: context,
+                                          delegate: DataSearch());
+                                    },
                                   ),
                                 ),
                               ],
@@ -249,220 +241,38 @@ class _DetailMagzState extends State<DetailMagz> {
                         ),
                       ),
                       Container(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              child: Image.asset('assets/detail_magz.png'),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20),
-                                          child: Text(
-                                            'This is title for topic inside our\n magazine',
-                                            style: TextStyle(
-                                                fontFamily: 'Viga',
-                                                fontSize: 22),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Container(
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: <Widget>[
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 20),
-                                                child: Text(
-                                                  '12 Nov 2020',
-                                                  style: TextStyle(
-                                                      fontFamily: 'Sora',
-                                                      fontSize: 15,
-                                                      color: Color(0xFF505050)),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 60),
-                                                child: Row(
-                                                  children: <Widget>[
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 10),
-                                                      child: GestureDetector(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            isSelectedShare =
-                                                                !isSelectedShare;
-                                                          });
-                                                        },
-                                                        child: Container(
-                                                          width: 24,
-                                                          height: 24,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                              color: isSelectedShare
-                                                                  ? Color(
-                                                                      0xFFF2F2F2)
-                                                                  : Color(
-                                                                      0xFF0D6AE3),
-                                                              border: Border.all(
-                                                                  color: isSelectedShare
-                                                                      ? Color(
-                                                                          0xFF868686)
-                                                                      : Color(
-                                                                          0xFF0D6AE3))),
-                                                          child: Center(
-                                                            child: Image.asset(
-                                                                'assets/share.png',
-                                                                width: 12,
-                                                                height: 12,
-                                                                color: isSelectedShare
-                                                                    ? Color(
-                                                                        0xFF000000)
-                                                                    : Color(
-                                                                        0xFFFFFFFF)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              right: 10),
-                                                      child: GestureDetector(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            isSelectedSave =
-                                                                !isSelectedSave;
-                                                          });
-                                                        },
-                                                        child: Container(
-                                                          width: 24,
-                                                          height: 24,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                              color: isSelectedSave
-                                                                  ? Color(
-                                                                      0xFFF2F2F2)
-                                                                  : Color(
-                                                                      0xFF0D6AE3),
-                                                              border: Border.all(
-                                                                  color: isSelectedSave
-                                                                      ? Color(
-                                                                          0xFF868686)
-                                                                      : Color(
-                                                                          0xFF0D6AE3))),
-                                                          child: Center(
-                                                            child: Image.asset(
-                                                                'assets/bookmared.png',
-                                                                width: 12,
-                                                                height: 12,
-                                                                color: isSelectedSave
-                                                                    ? Color(
-                                                                        0xFF000000)
-                                                                    : Color(
-                                                                        0xFFFFFFFF)),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          isSelectedStar =
-                                                              !isSelectedStar;
-                                                          show();
-                                                        });
-                                                      },
-                                                      child: Container(
-                                                        width: 24,
-                                                        height: 24,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        5),
-                                                            color: isSelectedStar
-                                                                ? Color(
-                                                                    0xFFF2F2F2)
-                                                                : Color(
-                                                                    0xFF0D6AE3),
-                                                            border: Border.all(
-                                                                color: isSelectedStar
-                                                                    ? Color(
-                                                                        0xFF868686)
-                                                                    : Color(
-                                                                        0xFF0D6AE3))),
-                                                        child: Center(
-                                                          child: Image.asset(
-                                                              'assets/stared.png',
-                                                              width: 12,
-                                                              height: 12,
-                                                              color: isSelectedStar
-                                                                  ? Color(
-                                                                      0xFF000000)
-                                                                  : Color(
-                                                                      0xFFFFFFFF)),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20),
-                                      child: Text(
-                                        'Lorem ipsum dolor sit amet, consectetur\nadipiscing elit. Nunc commodo fringilla\nefficitur. Mauris gravida leo sed risus\nsollicitudin tincidunt. Proin quis arcu\nconvallis, fringilla sem non, pharetra urna.',
-                                        style: TextStyle(
-                                          fontFamily: 'Sora',
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                        height: 650,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('assets/mag/cover_blur.png'),
+                                fit: BoxFit.cover)),
+                        child: PageView(
+                          controller: pageController,
+                          onPageChanged: (index) {
+                            setState(() {
+                              pageChanged = index;
+                            });
+                          },
+                          children: [
+                            Image.asset('assets/mag/h1.png'),
+                            Image.asset('assets/mag/h2.png'),
+                            Image.asset('assets/mag/h3.png'),
+                            Image.asset('assets/mag/h4.png'),
+                            Image.asset('assets/mag/h5.png'),
+                            Image.asset('assets/mag/h6.png'),
+                            Image.asset('assets/mag/h7.png'),
+                            Image.asset('assets/mag/h8.png'),
+                            Image.asset('assets/mag/h9.png'),
+                            Image.asset('assets/mag/h10.jpg'),
+                            Image.asset('assets/mag/h11.jpg'),
+                            Image.asset('assets/mag/h12.png'),
+                            Image.asset('assets/mag/h13.png'),
+                            Image.asset('assets/mag/h14.png'),
+                            Image.asset('assets/mag/h15.png'),
+                            Image.asset('assets/mag/h16.png'),
                           ],
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
@@ -487,7 +297,11 @@ class _DetailMagzState extends State<DetailMagz> {
                                   Icons.skip_previous,
                                   color: Color(0xFFFFFFFF),
                                 ),
-                                onPressed: null),
+                                onPressed: () {
+                                  pageController.animateToPage(0,
+                                      duration: duration,
+                                      curve: Curves.easeInOutQuint);
+                                }),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -496,7 +310,11 @@ class _DetailMagzState extends State<DetailMagz> {
                                   Icons.chevron_left,
                                   color: Color(0xFFFFFFFF),
                                 ),
-                                onPressed: null),
+                                onPressed: () {
+                                  pageController.animateToPage(--pageChanged,
+                                      duration: duration,
+                                      curve: Curves.easeInOutQuint);
+                                }),
                           ),
                           Image.asset('assets/mini_intaxa.png'),
                           Padding(
@@ -506,7 +324,11 @@ class _DetailMagzState extends State<DetailMagz> {
                                   Icons.chevron_right,
                                   color: Color(0xFFFFFFFF),
                                 ),
-                                onPressed: null),
+                                onPressed: () {
+                                  pageController.animateToPage(++pageChanged,
+                                      duration: duration,
+                                      curve: Curves.easeInOutQuint);
+                                }),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -515,7 +337,11 @@ class _DetailMagzState extends State<DetailMagz> {
                                   Icons.skip_next,
                                   color: Color(0xFFFFFFFF),
                                 ),
-                                onPressed: null),
+                                onPressed: () {
+                                  pageController.animateToPage(15,
+                                      duration: duration,
+                                      curve: Curves.easeInOutQuint);
+                                }),
                           ),
                         ],
                       )),
@@ -525,6 +351,66 @@ class _DetailMagzState extends State<DetailMagz> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class DataSearch extends SearchDelegate<String> {
+  final magazines = [
+    "Maspion IT",
+    "SMKN 1 Purwosari",
+    "Maspion Bank",
+  ];
+
+  final recentMagazine = ["SMKN 1 Purwosari", "Maspion IT"];
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+          icon: Icon(Icons.clear),
+          onPressed: () {
+            query = "";
+          })
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+        icon: AnimatedIcon(
+            icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
+        onPressed: () {
+          close(context, null);
+        });
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return null;
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestionList = query.isEmpty
+        ? recentMagazine
+        : magazines.where((p) => p.startsWith(query)).toList();
+
+    return ListView.builder(
+      itemBuilder: (context, index) => ListTile(
+        leading: Icon(Icons.history),
+        title: RichText(
+            text: TextSpan(
+                text: suggestionList[index].substring(0, query.length),
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                children: [
+              TextSpan(
+                  text: suggestionList[index].substring(query.length),
+                  style: TextStyle(color: Colors.grey))
+            ])),
+      ),
+      itemCount: suggestionList.length,
     );
   }
 }

@@ -1,6 +1,6 @@
-import 'package:covid/detailmagz.dart';
 import 'package:covid/login.dart';
 import 'package:covid/topicmagz.dart';
+import 'package:covid/web_view.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:rating_dialog/rating_dialog.dart';
@@ -24,10 +24,10 @@ class _MagazinesState extends State<Magazines> {
         barrierDismissible: false,
         builder: (context) {
           return RatingDialog(
-            icon: Icon(
-              Icons.star,
-              size: 100,
-              color: Color(0xFF0D6AE3),
+            icon: Image.asset(
+              'assets/mag/rating.png',
+              width: 200,
+              height: 200,
             ),
             title: 'Anda suka dengan majalah kami?',
             description: 'Berikan ratingmu kepada majalah kami',
@@ -50,6 +50,7 @@ class _MagazinesState extends State<Magazines> {
       body: Stack(
         children: <Widget>[menu(context), dashboard(context)],
       ),
+      drawer: Drawer(),
     );
   }
 
@@ -89,8 +90,8 @@ class _MagazinesState extends State<Magazines> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => TopicMagz()));
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Web()));
               },
               child: Container(
                 width: 126,
@@ -102,34 +103,7 @@ class _MagazinesState extends State<Magazines> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   child: Text(
-                    'Most Popular',
-                    style: TextStyle(
-                        fontFamily: 'Viga',
-                        fontSize: 18,
-                        color: Color(0xFFFFFFFF)),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => DetailMagz()));
-              },
-              child: Container(
-                width: 126,
-                height: 40,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xFF0D6AE3)),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: Text(
-                    'Developer',
+                    'Web View',
                     style: TextStyle(
                         fontFamily: 'Viga',
                         fontSize: 18,
@@ -220,7 +194,11 @@ class _MagazinesState extends State<Magazines> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: IconButton(
-                              icon: Icon(Icons.search), onPressed: null),
+                              icon: Icon(Icons.search),
+                              onPressed: () {
+                                showSearch(
+                                    context: context, delegate: DataSearch());
+                              }),
                         ),
                       ],
                     ),
@@ -232,7 +210,7 @@ class _MagazinesState extends State<Magazines> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                'Hai Ninno..',
+                                'Hi...',
                                 style: TextStyle(
                                   fontFamily: 'Viga',
                                   fontSize: 34,
@@ -261,9 +239,8 @@ class _MagazinesState extends State<Magazines> {
                           enlargeCenterPage: true,
                           scrollDirection: Axis.horizontal),
                       items: [
-                        "assets/cover_magazine.png"
-                            "assets/cover_magazine.png"
-                            "assets/cover_magazine.png"
+                        "assets/mag/cover_radius.png",
+                        "assets/cover_magazine.png",
                       ].map((i) {
                         return Builder(
                           builder: (BuildContext context) {
@@ -271,12 +248,14 @@ class _MagazinesState extends State<Magazines> {
                               child: Column(
                                 children: <Widget>[
                                   Container(
-                                    width: MediaQuery.of(context).size.width,
                                     child: Image.asset(
-                                      'assets/cover_magazine.png',
-                                      height: 329,
-                                      width: 255,
+                                      i,
+                                      height: 300,
+                                      width: 240,
                                     ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
                                   ),
                                   Text(
                                     'Magazine Maspion IT',
@@ -354,20 +333,20 @@ class _MagazinesState extends State<Magazines> {
                                                 borderRadius:
                                                     BorderRadius.circular(5),
                                                 color: isSelectedShare
-                                                    ? Color(0xFFF2F2F2)
-                                                    : Color(0xFF0D6AE3),
+                                                    ? Color(0xFF0D6AE3)
+                                                    : Color(0xFFF2F2F2),
                                                 border: Border.all(
                                                     color: isSelectedShare
-                                                        ? Color(0xFF868686)
-                                                        : Color(0xFF0D6AE3))),
+                                                        ? Color(0xFF0D6AE3)
+                                                        : Color(0xFF868686))),
                                             child: Center(
                                                 child: Image.asset(
                                               'assets/share.png',
                                               width: 12,
                                               height: 12,
                                               color: isSelectedShare
-                                                  ? Color(0xFF000000)
-                                                  : Color(0xFFFFFFFF),
+                                                  ? Color(0xFFFFFFFF)
+                                                  : Color(0xFF000000),
                                             )),
                                           ),
                                         ),
@@ -385,20 +364,20 @@ class _MagazinesState extends State<Magazines> {
                                               borderRadius:
                                                   BorderRadius.circular(5),
                                               color: isSelectedSave
-                                                  ? Color(0xFFF2F2F2)
-                                                  : Color(0xFF0D6AE3),
+                                                  ? Color(0xFF0D6AE3)
+                                                  : Color(0xFFF2F2F2),
                                               border: Border.all(
                                                   color: isSelectedSave
-                                                      ? Color(0xFF868686)
-                                                      : Color(0xFF0D6AE3))),
+                                                      ? Color(0xFF0D6AE3)
+                                                      : Color(0xFF868686))),
                                           child: Center(
                                               child: Image.asset(
                                             'assets/bookmared.png',
                                             width: 12,
                                             height: 12,
                                             color: isSelectedSave
-                                                ? Color(0xFF000000)
-                                                : Color(0xFFFFFFFF),
+                                                ? Color(0xFFFFFFFF)
+                                                : Color(0xFF000000),
                                           )),
                                         ),
                                       ),
@@ -419,20 +398,20 @@ class _MagazinesState extends State<Magazines> {
                                                 borderRadius:
                                                     BorderRadius.circular(5),
                                                 color: isSelectedStar
-                                                    ? Color(0xFFF2F2F2)
-                                                    : Color(0xFF0D6AE3),
+                                                    ? Color(0xFF0D6AE3)
+                                                    : Color(0xFFF2F2F2),
                                                 border: Border.all(
                                                     color: isSelectedStar
-                                                        ? Color(0xFF868686)
-                                                        : Color(0xFF0D6AE3))),
+                                                        ? Color(0xFF0D6AE3)
+                                                        : Color(0xFF868686))),
                                             child: Center(
                                                 child: Image.asset(
                                               'assets/stared.png',
                                               width: 12,
                                               height: 12,
                                               color: isSelectedStar
-                                                  ? Color(0xFF000000)
-                                                  : Color(0xFFFFFFFF),
+                                                  ? Color(0xFFFFFFFF)
+                                                  : Color(0xFF000000),
                                             )),
                                           ),
                                         ),
@@ -512,6 +491,66 @@ class _MagazinesState extends State<Magazines> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class DataSearch extends SearchDelegate<String> {
+  final magazines = [
+    "Maspion IT",
+    "SMKN 1 Purwosari",
+    "Maspion Bank",
+  ];
+
+  final recentMagazine = ["SMKN 1 Purwosari", "Maspion IT"];
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+          icon: Icon(Icons.clear),
+          onPressed: () {
+            query = "";
+          })
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+        icon: AnimatedIcon(
+            icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
+        onPressed: () {
+          close(context, null);
+        });
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return null;
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestionList = query.isEmpty
+        ? recentMagazine
+        : magazines.where((p) => p.startsWith(query)).toList();
+
+    return ListView.builder(
+      itemBuilder: (context, index) => ListTile(
+        leading: Icon(Icons.history),
+        title: RichText(
+            text: TextSpan(
+                text: suggestionList[index].substring(0, query.length),
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                children: [
+              TextSpan(
+                  text: suggestionList[index].substring(query.length),
+                  style: TextStyle(color: Colors.grey))
+            ])),
+      ),
+      itemCount: suggestionList.length,
     );
   }
 }
