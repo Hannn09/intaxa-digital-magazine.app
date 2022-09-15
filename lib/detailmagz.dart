@@ -291,7 +291,7 @@ class _DetailMagzState extends State<DetailMagz> {
                       child: Row(
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: 25),
                             child: IconButton(
                                 icon: Icon(
                                   Icons.skip_previous,
@@ -316,7 +316,23 @@ class _DetailMagzState extends State<DetailMagz> {
                                       curve: Curves.easeInOutQuint);
                                 }),
                           ),
-                          Image.asset('assets/mini_intaxa.png'),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Magazines()));
+                            },
+                            child: Container(
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF0D6AE3),
+                              ),
+                              child: Center(
+                                child: Image.asset('assets/mini_intaxa.png'),
+                              ),
+                            ),
+                          ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 15),
                             child: IconButton(

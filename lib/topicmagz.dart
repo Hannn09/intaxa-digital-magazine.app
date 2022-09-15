@@ -858,10 +858,15 @@ class _TopicMagzState extends State<TopicMagz> {
                 child: Row(
                   children: <Widget>[
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DetailMagz()));
+                      },
                       child: Container(
                         height: 63.0,
-                        width: 360.0,
+                        width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(20)),
